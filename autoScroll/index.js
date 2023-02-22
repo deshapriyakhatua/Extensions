@@ -22,11 +22,11 @@ function runOnTab(speed){
 
     let scrollerID;
     let paused = true;
-    let interval = speed * 5;
+    let interval = speed * 2;
 
     function startScroll(){
         let id = setInterval(function() {
-            window.scrollBy(0, 2);
+            window.scrollBy(0, 1);
             // if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
             //     // Reached end of page
             //     stopScroll();
