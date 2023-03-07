@@ -9,7 +9,7 @@ document.getElementById("inputSearch").addEventListener("change",()=>{
 
 document.getElementById("buttonStart").addEventListener("click",async () => {
 
-    clearInterval(interval);
+    if(interval){ clearInterval(interval); }
 
     let [currTab] = await chrome.tabs.query({active:true, currentWindow:true});
 
@@ -34,7 +34,11 @@ document.getElementById("buttonStart").addEventListener("click",async () => {
 
         count--;
         document.getElementById("pTag").textContent = count;
-        if(count === 0){ clearInterval(interval); }
+        if(count === 0){ 
+            let sound = new Audio(chrome.runtime.getURL('beep.mp3'));
+            sound.play();
+            clearInterval(interval); 
+        }
 
     },duration);
 
