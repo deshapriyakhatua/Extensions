@@ -373,7 +373,7 @@ function runOnTab(count){
     let submitIn = document.getElementById("sb_form_go");
 
     
-    searchIn.value = itemSer[Math.floor(Math.random() * itemSer.length)] + " " + String.fromCharCode(Math.random() * (90 - 65) + 65);; 
+    searchIn.value = itemSer[Math.floor(Math.random() * itemSer.length)] + " " + itemSer[Math.floor(Math.random() * itemSer.length)] + " " + String.fromCharCode(Math.random() * (90 - 65) + 65) + String.fromCharCode(Math.random() * (90 - 65) + 65);
     
     submitIn.click(); 
     
