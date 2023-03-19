@@ -4,6 +4,7 @@ document.getElementById("inputSearch").addEventListener("change",()=>{
     let select = document.getElementById("inputSearch");
     let count = select.options[select.selectedIndex].value * 1;
     document.getElementById("pTag").textContent = count;
+
 });
 
 
@@ -21,7 +22,6 @@ document.getElementById("buttonStart").addEventListener("click",async () => {
 
     let select = document.getElementById("inputSearch");
     let count = select.options[select.selectedIndex].value * 1;
-    
 
     interval = setInterval(()=>{ 
 
@@ -29,14 +29,15 @@ document.getElementById("buttonStart").addEventListener("click",async () => {
         chrome.scripting.executeScript({
             target : { tabId : currTab.id },
             func : runOnTab,
-            args: []
+            args: [count]
         });
 
         count--;
         document.getElementById("pTag").textContent = count;
-        if(count === 0){ 
-            let sound = new Audio(chrome.runtime.getURL('beep.mp3'));
-            sound.play();
+        if(count === -1){ 
+            let url = chrome.runtime.getURL('beep.mp3');
+            let sound = new Audio(url); 
+            //sound.play();
             clearInterval(interval); 
         }
 
@@ -47,7 +48,15 @@ document.getElementById("buttonStart").addEventListener("click",async () => {
 
 
 
-function runOnTab(){
+function runOnTab(count){
+    //alert('fjfj');
+    // if(count == 0){
+    
+    //     let keyEvent = new keyBoardEvent('keydown', {key: 'F12'});
+    //     document.body.dispatchEvent(keyEvent);
+    //     alert('fjfj');
+    //     return;
+    // }
 
     let itemSer = [
         "python",
