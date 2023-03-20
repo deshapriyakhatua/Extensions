@@ -15,6 +15,10 @@ document.getElementById("buttonStart").addEventListener("click",async () => {
     let [currTab] = await chrome.tabs.query({active:true, currentWindow:true});
 
     document.getElementById("buttonStart").style.backgroundColor = "rgb(247, 159, 255)";
+
+    setTimeout(()=>{ document.getElementById("buttonStart").style.backgroundColor = "rgb(255, 255, 255)"; },1500);
+
+    
     let selectDuration = document.getElementById("input");
     let duration = selectDuration.options[selectDuration.selectedIndex].value*1000;
 
