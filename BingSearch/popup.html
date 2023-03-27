@@ -57,11 +57,88 @@
 
         width: 50px;
         height: 30px;
-        margin: 10px 10px 10px 12px;
+        margin: 10px 10px 10px 8px;
         border: 2px solid black;
         border-radius: 10px;
         font-size: 14px;
 
+        }
+
+        #interval {
+            width: 50px;
+            height: 30px;
+            margin: 10px 10px 10px 8px;
+            padding: 0px 0px 0px 5px;
+            border: 2px solid black;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 31px;
+            margin: 10px 10px 10px 8px;
+        }
+
+        .switch #checkbox { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        #checkbox:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        #checkbox:checked + #interval {
+            visibility: visible;
+        }
+
+        #checkbox:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        #checkbox:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(17px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 25px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
         }
     </style>
 
@@ -84,6 +161,17 @@
     <select id="inputSearch" >
         <option value="35" selected>pc</option>
         <option value="20">phone</option>
+    </select>
+
+    <label class="switch">
+        <input type="checkbox" id="checkbox" >
+        <span class="slider round"></span>
+    </label>
+
+    <select id="interval" >
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="5">5</option>
     </select>
 
     <button id="buttonStart" role="button">start</button>

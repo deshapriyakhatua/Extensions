@@ -1,3 +1,15 @@
+// change css on checkbox selection
+let checkbox = document.getElementById('checkbox');
+
+let boxInterval = document.getElementById('interval');
+
+checkbox.addEventListener('click', function handleClick() {
+  if (checkbox.checked) { boxInterval.style.display = 'block';  } 
+  else {  boxInterval.style.display = 'none';  }
+});
+
+
+
 let interval;
 
 document.getElementById("inputSearch").addEventListener("change",()=>{ 
@@ -10,42 +22,64 @@ document.getElementById("inputSearch").addEventListener("change",()=>{
 
 document.getElementById("buttonStart").addEventListener("click",async () => {
 
+    // change css of button on each click
+    document.getElementById("buttonStart").style.backgroundColor = "rgb(247, 159, 255)";
+    setTimeout(()=>{ document.getElementById("buttonStart").style.backgroundColor = "rgb(255, 255, 255)"; },1500);
+
+
+    // if interval already created clear it
     if(interval){ clearInterval(interval); }
 
     let [currTab] = await chrome.tabs.query({active:true, currentWindow:true});
 
-    document.getElementById("buttonStart").style.backgroundColor = "rgb(247, 159, 255)";
 
-    setTimeout(()=>{ document.getElementById("buttonStart").style.backgroundColor = "rgb(255, 255, 255)"; },1500);
-
-    
+    // "duration" is "waiting after each search" AND "durationBing" is "waiting after bing.com opened"
     let selectDuration = document.getElementById("input");
     let duration = selectDuration.options[selectDuration.selectedIndex].value*1000;
+    let durationBing = 0;
+    if(document.getElementById('checkbox').checked){
+        let selectDurationBing = document.getElementById("interval");
+        durationBing = selectDurationBing.options[selectDurationBing.selectedIndex].value*1000;
+    }
 
-    if(duration === 0){ duration = 2000; }
-
+    // Number of searches
     let select = document.getElementById("inputSearch");
     let count = select.options[select.selectedIndex].value * 1;
 
     interval = setInterval(()=>{ 
 
-
-        chrome.scripting.executeScript({
-            target : { tabId : currTab.id },
-            func : runOnTab,
-            args: [count]
-        });
-
-        count--;
-        document.getElementById("pTag").textContent = count;
-        if(count === -1){ 
-            let url = chrome.runtime.getURL('beep.mp3');
-            let sound = new Audio(url); 
-            //sound.play();
-            clearInterval(interval); 
+        // open bing.com first if checkbox is selected and wait for "durationBing" mili sec
+        if(document.getElementById('checkbox').checked){
+            let selectDurationBing = document.getElementById("interval");
+            durationBing = selectDurationBing.options[selectDurationBing.selectedIndex].value*1000;
+            chrome.tabs.update({active: true, url: "https://www.bing.com/"});
+            console.log("bing opened");
         }
+        
+        // inject JS to active tab console after "durationBing" mili sec
+        setTimeout(()=>{
 
-    },duration);
+            chrome.scripting.executeScript({
+                target : { tabId : currTab.id },
+                func : runOnTab,
+                args: [count]
+            });
+            console.log("js injected");
+            // updating count of searches left
+            count--;
+            document.getElementById("pTag").textContent = count;
+            if(count === -1){ 
+                // let url = chrome.runtime.getURL('beep.mp3');
+                // let sound = new Audio(url); 
+                //sound.play();
+                clearInterval(interval); 
+            }
+
+
+        }, durationBing);
+        
+
+    },duration + durationBing);
 
 });
 
@@ -53,14 +87,7 @@ document.getElementById("buttonStart").addEventListener("click",async () => {
 
 
 function runOnTab(count){
-    //alert('fjfj');
-    // if(count == 0){
-    
-    //     let keyEvent = new keyBoardEvent('keydown', {key: 'F12'});
-    //     document.body.dispatchEvent(keyEvent);
-    //     alert('fjfj');
-    //     return;
-    // }
+   
 
     let itemSer = [
         "python",
@@ -375,12 +402,13 @@ function runOnTab(count){
     let searchIn = document.getElementById("sb_form_q");
 
     let submitIn = document.getElementById("sb_form_go");
+    
 
     
     searchIn.value = itemSer[Math.floor(Math.random() * itemSer.length)] + " " + itemSer[Math.floor(Math.random() * itemSer.length)] + " " + String.fromCharCode(Math.random() * (90 - 65) + 65) + String.fromCharCode(Math.random() * (90 - 65) + 65);
     
-    submitIn.click(); 
-    
+    try{ submitIn.click(); } catch(e){}
+    try{ document.forms[0].submit(); } catch(e){}
     
 
 }
