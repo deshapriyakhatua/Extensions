@@ -5,5 +5,13 @@
     "action" : {
         "default_popup" : "popup.html"
     },
-    "permissions" : ["activeTab","scripting"]
+    "permissions" : [
+        "activeTab",
+        "scripting",
+        "tabs",
+        "notifications",
+        "http://*/",
+        "https://*/"
+    ]
+    
 }
