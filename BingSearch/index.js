@@ -1,3 +1,10 @@
+chrome.runtime.onMessage.addListener((req,sender,res)=>{
+    document.getElementById('pTag1').textContent = req.data;
+    console.log(req.data);
+})
+// let data = ["Deshapriya Khatua"];
+// chrome.runtime.sendMessage({data});
+
 // change css on checkbox selection
 let checkbox = document.getElementById('checkbox');
 
@@ -645,5 +652,6 @@ function runOnTab(count){
     try{ submitIn.click(); } catch(e){}
     try{ document.forms[0].submit(); } catch(e){}
     
-
+    // let data = ["Deshapriya Khatua"];
+    // chrome.runtime.sendMessage({data});
 }

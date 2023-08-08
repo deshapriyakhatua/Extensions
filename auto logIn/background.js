@@ -1,16 +1,4 @@
-var previousStatus = navigator.onLine;
 
-function checkInternetStatus() {
-
-
-
-  var currentStatus = navigator.onLine;
-  console.log(currentStatus, previousStatus);
-  if (currentStatus !== previousStatus) {
-    previousStatus = currentStatus;
-    showNotification(currentStatus ? 'Online' : 'Offline');
-  }
-}
 
 function showNotification(status) {
 
@@ -23,20 +11,28 @@ function showNotification(status) {
 
 }
 
-
-
-
+let interval;
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+
   if (request.action === 'getStatus') {
     var isOnline = navigator.onLine;
     var status = isOnline ? 'Online' : 'Offline';
-    sendResponse({ status: status });
+    console.log(interval);
+    sendResponse({ status: status, interval: interval });
   }
+  else if (request.action === 'start') {
+    if(interval) clearInterval( interval );
+    interval = setInterval(fetchData, 5000); // Check status every 2 seconds
+    sendResponse({ status: status, interval: interval });
+  }
+  else if (request.action === 'stop') {
+    clearInterval( interval );
+    interval = null;
+    sendResponse({ status: status, interval: interval });
+  }
+
 });
-
-
-setInterval(fetchData, 2000); // Check status every 2 seconds
 
 async function fetchData() {
 
@@ -46,7 +42,7 @@ async function fetchData() {
 
     if (data.includes("loginform")) {
       console.log("Log In required...")
-      showNotification(false);
+      //showNotification(false);
       logIn();
     }
     else if (data.includes("ADARSHA KHATUA")) {
@@ -77,7 +73,7 @@ async function logIn() {
 
     let data = await res.text();
     console.log("Log In Status : " + data.includes("ADARSHA KHATUA"));
-    if(data.includes("ADARSHA KHATUA")){ showNotification(true); }
+    //if(data.includes("ADARSHA KHATUA")){ showNotification(true); }
 
   }
   catch (err) {

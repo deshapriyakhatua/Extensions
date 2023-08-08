@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+     
+        /* drag toolbar */
+
+        #dragParentDiv {
+            height: auto;
+            width: 100px;
+            position: absolute;
+            z-index: 90000;
+            text-align: center;
+            border: 1px solid #130000;
+            background-color: #f1f1f1;
+        }
+
+        #dragElemDiv {
+            position: relative;
+            font-size: 25px;
+            cursor: move;
+            background-color: #2196F3;
+            color: #fff;
+        }
+        #dragInputStroke {
+            position: relative;
+            top: 5px;
+            border: 1px solid rgb(130, 167, 242);
+            border-radius: 5px;
+        }
+        #dragPTagStroke {
+            position: relative;
+            left: 80px;
+            top: -35px;
+            color: #ffffff;
+            background-color: #050000;
+            border-radius: 5px;
+            visibility: hidden;
+        }
+        #dragInputStroke:hover ~ #dragPTagStroke {
+            visibility: visible;
+        }
+        #dragPTagLineWidth {
+            position: relative;
+            left: 80px;
+            top: -35px;
+            color: #ffffff;
+            background-color: #050000;
+            border-radius: 5px;
+            visibility: hidden;
+        }
+        #dragInputLineWidth:hover ~ #dragPTagLineWidth {
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <section id="containerr">
+        <div id="toolbar">
+            <label for="dragInputStroke">dragInputStroke</label>
+            <input id="dragInputStroke" name='dragInputStroke' type="color">
+            <label for="dragInputLineWidth">Line Width</label>
+            <input id="dragInputLineWidth" name='dragInputLineWidth' type="number" value="5">
+            <button id="dragButtonClear">Clear</button>
+        </div>
+        <div class="drawing-board">
+            <canvas id="drawing-board"></canvas>
+        </div>
+    </section> -->
+
+    <div id="dragParentDiv">
+        <div id="dragElemDiv" >∷∷</div>
+
+        <input id="dragInputStroke" name='dragInputStroke' type="color">
+        <p id="dragPTagStroke">Select Color</p>
+
+        <input id="dragInputLineWidth" name='dragInputLineWidth' type="number" value="4">
+        <p id="dragPTagLineWidth">Line Width</p>
+
+        <button id="dragButtonClear">🧹</button>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    // drag toolbar
+
+    dragElement(document.getElementById("dragParentDiv"));
+
+    function dragElement(elmnt) {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        if (document.getElementById("dragElemDiv")) {
+            /* if present, the header is where you move the DIV from:*/
+            document.getElementById("dragElemDiv").onmousedown = dragMouseDown;
+        } else {
+            /* otherwise, move the DIV from anywhere inside the DIV:*/
+            elmnt.onmousedown = dragMouseDown;
+        }
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // set the element's new position:
+            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            /* stop moving when mouse button is released:*/
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+
+    }
+
+
+    const canvas = document.getElementById('drawing-board');
+    const toolbar = document.getElementById('toolbar');
+    const ctx = canvas.getContext('2d');
+
+    const canvasOffsetX = canvas.offsetLeft;
+    const canvasOffsetY = canvas.offsetTop;
+
+    canvas.width = window.innerWidth - canvasOffsetX;
+    canvas.height = window.innerHeight - canvasOffsetY;
+
+    let isPainting = false;
+    let dragInputLineWidth = 5;
+    let startX;
+    let startY;
+
+    toolbar.addEventListener('click', e => {
+        if (e.target.id === 'dragButtonClear') {
+            ctx.dragButtonClearRect(0, 0, canvas.width, canvas.height);
+            //document.body.style.overflow = "auto";
+        }
+    });
+
+    toolbar.addEventListener('change', e => {
+        if (e.target.id === 'dragInputStroke') {
+            ctx.dragInputStrokeStyle = e.target.value;
+        }
+
+        if (e.target.id === 'dragInputLineWidth') {
+            dragInputLineWidth = e.target.value;
+        }
+
+    });
+
+    // drawing 
+    const draw = (e) => {
+        if (!isPainting) {
+            return;
+        }
+
+        //document.body.style.overflow="hidden";
+
+        ctx.dragInputLineWidth = dragInputLineWidth;
+        ctx.lineCap = 'round';
+
+        ctx.lineTo(e.clientX - canvasOffsetX, e.clientY);
+        ctx.dragInputStroke();
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+        isPainting = true;
+        startX = e.clientX;
+        startY = e.clientY;
+    });
+
+    canvas.addEventListener('mouseup', e => {
+        isPainting = false;
+        ctx.dragInputStroke();
+        ctx.beginPath();
+    });
+
+    canvas.addEventListener('mousemove', draw);
+
+</script>
