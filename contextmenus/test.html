@@ -15,8 +15,10 @@
             position: absolute;
             z-index: 90000;
             text-align: center;
-            border: 1px solid #130000;
+            border: 1px solid #c7c7c7;
+            border-radius: 5px;
             background-color: #f1f1f1;
+            padding-bottom: 5px;
         }
 
         #dragElemDiv {
@@ -25,13 +27,20 @@
             cursor: move;
             background-color: #2196F3;
             color: #fff;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
         }
         #dragInputStroke {
-            width: 70px;
+            width: 30px;
+            height: 30px;
             position: relative;
             top: 5px;
-            border: 1px solid rgb(130, 167, 242);
-            border-radius: 5px;
+            
+            outline: none;  
+            border: none;      
+        }
+        #dragInputStroke::-webkit-color-swatch {
+            border-radius: 50%;
         }
         #dragPTagStroke {
             position: relative;
@@ -60,6 +69,48 @@
         #dragInputLineWidth:hover ~ #dragPTagLineWidth {
             visibility: visible;
         }
+
+        #colorBlock{
+            /* border: 1px solid red; */
+            height: 50px;
+            padding: 6px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-wrap: wrap;
+            position: relative;
+            top: -40px
+        }
+        .colorPallet{
+            /* border: 1px solid black; */
+            aspect-ratio: 1;
+            height: 18px;
+            border-radius: 50%;
+        }
+        .colorPallet:nth-child(1){
+            background-color: #000000;
+        }
+        .colorPallet:nth-child(2){
+            background-color: red;
+        }
+        .colorPallet:nth-child(3){
+            background-color: teal;
+        }
+        .colorPallet:nth-child(4){
+            background-color: blueviolet;
+        }
+        .colorPallet:nth-child(5){
+            background-color: green;
+        }
+        .colorPallet:nth-child(6){
+            background-color: white;
+        }
+        .colorPallet:nth-child(7){
+            background-color: yellow;
+        }
+        .colorPallet:nth-child(8){
+            background-color: brown;
+        }
     </style>
 </head>
 
@@ -80,10 +131,23 @@
     <div id="dragParentDiv">
         <div id="dragElemDiv" >∷∷</div>
 
-        <input id="dragInputStroke" name='dragInputStroke' type="color">
+        <input id="dragInputStroke" name='dragInputStroke' type="color" >
         <p id="dragPTagStroke">Select Color</p>
+        
+        <div id="colorBlock">
+            <div class="colorPallet"></div>
+            <div class="colorPallet"></div>
+            <div class="colorPallet"></div>
+            <div class="colorPallet"></div>
+            <div class="colorPallet"></div>
+            <div class="colorPallet"></div>
+            <div class="colorPallet"></div>
+            <div class="colorPallet"></div>
+        </div>
+       
+        <div id="options"></div>
 
-        <input id="dragInputLineWidth" name='dragInputLineWidth' type="number" value="4">
+        <input id="dragInputLineWidth" name='dragInputLineWidth' type="range" value="4">
         <p id="dragPTagLineWidth">Line Width</p>
 
         <button id="dragButtonClear">🧹</button>
