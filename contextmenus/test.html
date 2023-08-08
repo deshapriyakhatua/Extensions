@@ -27,6 +27,7 @@
             color: #fff;
         }
         #dragInputStroke {
+            width: 70px;
             position: relative;
             top: 5px;
             border: 1px solid rgb(130, 167, 242);
@@ -43,6 +44,9 @@
         }
         #dragInputStroke:hover ~ #dragPTagStroke {
             visibility: visible;
+        }
+        #dragInputLineWidth{
+            width: 60px;
         }
         #dragPTagLineWidth {
             position: relative;
@@ -136,7 +140,7 @@
 
     }
 
-
+/* paint */
     const canvas = document.getElementById('drawing-board');
     const toolbar = document.getElementById('toolbar');
     const ctx = canvas.getContext('2d');
