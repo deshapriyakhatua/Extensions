@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+     
+        
+    </style>
+</head>
+
+<body>
+    <section id="containerr">
+        <div class="drawing-board">
+            <canvas id="drawing-board"></canvas>
+        </div>
+    </section>
+
+    
+
+</body>
+
+</html>
+
+<script>
+   
+/* paint */
+    
+    //const toolbar = document.getElementById('toolbar');
+
+    // toolbar.addEventListener('click', e => {
+    //     if (e.target.id === 'dragButtonClear') {
+    //         ctx.dragButtonClearRect(0, 0, canvas.width, canvas.height);
+    //     }
+    // });
+
+    // toolbar.addEventListener('change', e => {
+    //     if (e.target.id === 'dragInputStroke') {
+    //         ctx.dragInputStrokeStyle = e.target.value;
+    //     }
+
+    //     if (e.target.id === 'dragInputLineWidth') {
+    //         dragInputLineWidth = e.target.value;
+    //     }
+
+    // });
+
+    const canvas = document.getElementById('drawing-board');
+    const ctx = canvas.getContext('2d');
+
+    const canvasOffsetX = canvas.offsetLeft;
+    const canvasOffsetY = canvas.offsetTop;
+
+    canvas.width = window.innerWidth - canvasOffsetX;
+    canvas.height = window.innerHeight - canvasOffsetY;
+
+    let isPainting = false;
+    let dragInputLineWidth = 5;
+    let startX;
+    let startY;
+
+    ctx.dragInputStrokeStyle = "green";
+
+    // drawing 
+    const draw = (e) => {
+        if (!isPainting) {
+            return;
+        }
+
+        ctx.dragInputLineWidth = dragInputLineWidth;
+        ctx.lineCap = 'round';
+
+        ctx.lineTo(e.clientX - canvasOffsetX, e.clientY);
+        ctx.dragInputStroke();
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+        isPainting = true;
+        startX = e.clientX;
+        startY = e.clientY;
+    });
+
+    canvas.addEventListener('mouseup', e => {
+        isPainting = false;
+        ctx.dragInputStroke();
+        ctx.beginPath();
+    });
+
+    canvas.addEventListener('mousemove', draw);
+
+</script>
