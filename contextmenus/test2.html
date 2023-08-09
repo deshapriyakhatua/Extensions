@@ -6,28 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-     
-        
+        #drawing-board {
+            border: 1px solid red;
+            z-index: 1000000;
+        }
     </style>
 </head>
 
 <body>
     <section id="containerr">
-        <div class="drawing-board">
-            <canvas id="drawing-board"></canvas>
-        </div>
+        <canvas id="drawing-board"></canvas>
     </section>
 
-    
+
 
 </body>
 
 </html>
 
 <script>
-   
-/* paint */
-    
+
+    /* paint */
+
     //const toolbar = document.getElementById('toolbar');
 
     // toolbar.addEventListener('click', e => {
@@ -50,44 +50,65 @@
     const canvas = document.getElementById('drawing-board');
     const ctx = canvas.getContext('2d');
 
-    const canvasOffsetX = canvas.offsetLeft;
-    const canvasOffsetY = canvas.offsetTop;
-
-    canvas.width = window.innerWidth - canvasOffsetX;
-    canvas.height = window.innerHeight - canvasOffsetY;
+    canvas.width = window.innerWidth/2;
+    canvas.height = document.body.scrollHeight;
 
     let isPainting = false;
     let dragInputLineWidth = 5;
-    let startX;
-    let startY;
 
-    ctx.dragInputStrokeStyle = "green";
+    ctx.strokeStyle = "blue";
 
-    // drawing 
+
+    const startDraw = (e) => {
+
+        isPainting = true;
+        ctx.beginPath();
+        ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop + window.pageYOffset);
+        e.preventDefault();
+
+    };
+
     const draw = (e) => {
-        if (!isPainting) {
-            return;
-        }
 
-        ctx.dragInputLineWidth = dragInputLineWidth;
+        if (!isPainting) return;
+
+        ctx.lineWidth = dragInputLineWidth;
         ctx.lineCap = 'round';
-
-        ctx.lineTo(e.clientX - canvasOffsetX, e.clientY);
-        ctx.dragInputStroke();
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "blue";
+        ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop + window.pageYOffset);
+        ctx.stroke();
+        e.preventDefault();
+        console.log(e.clientY);
     }
 
-    canvas.addEventListener('mousedown', (e) => {
-        isPainting = true;
-        startX = e.clientX;
-        startY = e.clientY;
-    });
+    const endDraw = (e) => {
 
-    canvas.addEventListener('mouseup', e => {
+        if (!isPainting) return;
+
         isPainting = false;
-        ctx.dragInputStroke();
-        ctx.beginPath();
-    });
+        ctx.stroke();
+        ctx.closePath();
+        e.preventDefault();
 
+    }
+
+    const clear = (e) => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    canvas.addEventListener('mousedown', startDraw);
     canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', endDraw);
+    canvas.addEventListener('mouseout', endDraw);
 
+    canvas.addEventListener('touchstart', startDraw);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', endDraw);
+
+    window.addEventListener("scroll", () => {
+        //canvas.height = window.innerHeight + window.pageYOffset;
+        console.log(document.body.scrollHeight);
+        console.log(window.pageYOffset + window.innerHeight);
+    })
 </script>
