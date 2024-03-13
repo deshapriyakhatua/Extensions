@@ -1,7 +1,4 @@
-chrome.runtime.onMessage.addListener((req,sender,res)=>{
-    document.getElementById('pTag1').textContent = req.data;
-    console.log(req.data);
-})
+
 // let data = ["Deshapriya Khatua"];
 // chrome.runtime.sendMessage({data});
 
