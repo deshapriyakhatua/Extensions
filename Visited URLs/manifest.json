@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "URL lists",
+    "name": "Visited URLs",
     "version": "1.0",
-    "description": "Tracks and lists URLs opened today.",
+    "description": "Tracks URLs opened today.",
     "permissions": [
       "scripting",
       "storage",

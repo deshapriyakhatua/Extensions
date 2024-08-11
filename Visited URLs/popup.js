@@ -24,10 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
             link.href = visitedURL.url;
             link.target = "_blank";
             link.title = visitedURL.url;
-            link.innerText = new URL(visitedURL.url).hostname;
+            link.innerText = visitedURL.incognito ? '------' : new URL(visitedURL.url).hostname;
 
             listItem.appendChild(link);
-            listItem.innerHTML += `<br><span class="timestamp"> Time: ${formattedTime} &nbsp;&nbsp;&nbsp; Date: ${formattedDate}</span>`;
+            listItem.innerHTML += `<br><span class="timestamp"> Time: ${formattedTime} &nbsp;&nbsp;&nbsp; Date: ${formattedDate}${visitedURL.incognito ?'&nbsp;&nbsp;&nbsp;incognito' :''}</span>`;
             urlListElement.prepend(listItem);
         });
 
